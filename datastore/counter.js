@@ -38,9 +38,22 @@ const writeCounter = (count, callback) => {
 
 // Public API - Fix this function //////////////////////////////////////////////
 
-exports.getNextUniqueId = () => {
-  counter = counter + 1;
-  return zeroPaddedNumber(counter);
+//input is error of TODO object from callback, global var counter
+//output put a id number
+exports.getNextUniqueId = (callback) => {
+  // counter = counter + 1;
+  // return zeroPaddedNumber(counter);
+
+  //first need to find the current counter
+  //save current counter
+  //increment that counter
+  //write the new counter to the files somehow
+  //return the new counter as a number to be assigned as id when called
+  readCounter((err, currentCounter) => {
+    writeCounter(currentCounter + 1, (err, numberStr) => {
+      callback(err, numberStr);
+    });
+  });
 };
 
 
