@@ -44,19 +44,22 @@ exports.readAll = (callback) => {
       callback(null, objArray);
     }
   });
-  // var data = _.map(items, (text, id) => {
-  //   return { id, text };
-  // });
-  // callback(null, data);
 };
 
+
+//return the string within the todo file
+//find the relevant file, read it, return the contents of that file
 exports.readOne = (id, callback) => {
-  var text = items[id];
-  if (!text) {
-    callback(new Error(`No item with id: ${id}`));
-  } else {
-    callback(null, { id, text });
-  }
+  //call read file on the expected file (given id)
+  //if error, callback with error
+  //if succeeds then pass back the contents of the file
+  fs.readFile(path.join(exports.dataDir, `${id}.txt`), (err, text) => {
+    if (err) {
+      callback(new Error('no file found with that id'));
+    } else {
+      callback(null, { id: id, text: text.toString()});
+    }
+  });
 };
 
 exports.update = (id, text, callback) => {
