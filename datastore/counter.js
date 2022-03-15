@@ -51,10 +51,14 @@ exports.getNextUniqueId = (callback) => {
   //return the new counter as a number to be assigned as id when called
   readCounter((err, currentCounter) => {
     writeCounter(currentCounter + 1, (err, numberStr) => {
-      callback(err, numberStr);
+      callback(null, numberStr);
     });
   });
 };
+
+// ++number,increments first
+// number++,returns first
+// + 1,
 
 
 
