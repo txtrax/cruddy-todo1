@@ -8,22 +8,21 @@ var items = {};
 // Public API - Fix these CRUD functions ///////////////////////////////////////
 
 exports.create = (text, callback) => {
-  // var id =npm run test
-
   counter.getNextUniqueId((err, numberStr) => {
     if (err) {
       throw ('failed id');
     } else {
       //make a new file
-
-      console.log(numberStr);
-      return numberStr;
+      fs.writeFile(path.join(exports.dataDir, `${numberStr}.txt`), text, (err) => {
+        if (err) {
+          throw ('error in write file!');
+        } else {
+          //callback sends the response back?
+          callback(null, { id: numberStr, text: text });
+        }
+      });
     }
-    // callback(null, { id, text });
   });
-
-
-
   // var id = counter.getNextUniqueId();
   // items[id] = text;
   // callback(null, { id, text });
@@ -68,7 +67,11 @@ exports.delete = (id, callback) => {
 
 // Config+Initialization code -- DO NOT MODIFY /////////////////////////////////
 
+//filepath to use when creating todo
 exports.dataDir = path.join(__dirname, 'data');
+// dirname = current directory
+// .join adds /data to the current directory
+// dataDir = currentDirectory/data
 
 exports.initialize = () => {
   if (!fs.existsSync(exports.dataDir)) {
