@@ -63,27 +63,32 @@ exports.readOne = (id, callback) => {
 };
 
 exports.update = (id, text, callback) => {
-  var item = items[id];
-  if (!item) {
-    callback(new Error(`No item with id: ${id}`));
-  } else {
-    items[id] = text;
-    callback(null, { id, text });
-  }
+  fs.readFile(path.join(exports.dataDir, `${id}.txt`), (err) => {
+    if (err) {
+      callback(new Error('womp womp'));
+    } else {
+      fs.writeFile(path.join(exports.dataDir, `${id}.txt`), text, (err) => {
+        if (err) {
+          callback(new Error('err'));
+        } else {
+          callback(null, {id: id, text: text });
+        }
+      });
+    }
+  });
 };
 
 exports.delete = (id, callback) => {
-  var item = items[id];
-  delete items[id];
-  if (!item) {
-    // report an error if item not found
-    callback(new Error(`No item with id: ${id}`));
-  } else {
-    callback();
-  }
+  fs.unlink(path.join(exports.dataDir, `${id}.txt`), (err) => {
+    if (err) {
+      callback(new Error('error'));
+    } else {
+      callback(null);
+    }
+  });
 };
 
-// Config+Initialization code -- DO NOT MODIFY /////////////////////////////////
+// Config+Initialization code -- DO NOT MODIFY //
 
 //filepath to use when creating todo
 exports.dataDir = path.join(__dirname, 'data');
