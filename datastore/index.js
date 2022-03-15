@@ -3,7 +3,7 @@ const path = require('path');
 const _ = require('underscore');
 const counter = require('./counter');
 
-var items = {};
+// var items = {};
 
 // Public API - Fix these CRUD functions ///////////////////////////////////////
 
@@ -23,16 +23,31 @@ exports.create = (text, callback) => {
       });
     }
   });
-  // var id = counter.getNextUniqueId();
-  // items[id] = text;
-  // callback(null, { id, text });
 };
 
+//returns an array of todos
+//read the dataDir and build a list of files, use readdir
+//do not read files!!!!!!!!!!
+//when sent back to client, use id for the text of the todo
 exports.readAll = (callback) => {
-  var data = _.map(items, (text, id) => {
-    return { id, text };
+  fs.readdir(exports.dataDir, (err, arrayStr) => {
+    if (err) {
+      throw ('errorrrrrrr');
+    } else {
+      //return array of strings
+      //call map on arrayStr
+      //within map we want to create a new array where each element is an object
+      const objArray = arrayStr.map( (file) => {
+        const fileName = file.split('.')[0].toString();
+        return { id: fileName, text: fileName };
+      });
+      callback(null, objArray);
+    }
   });
-  callback(null, data);
+  // var data = _.map(items, (text, id) => {
+  //   return { id, text };
+  // });
+  // callback(null, data);
 };
 
 exports.readOne = (id, callback) => {
